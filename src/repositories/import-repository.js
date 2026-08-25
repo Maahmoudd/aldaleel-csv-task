@@ -15,6 +15,18 @@ export async function findImportById(id) {
   return models.Import.findByPk(id);
 }
 
+export async function findImports({ limit, offset }) {
+  return models.Import.findAndCountAll({
+    attributes: { exclude: ['storageKey'] },
+    limit,
+    offset,
+    order: [
+      ['uploadedAt', 'DESC'],
+      ['id', 'DESC'],
+    ],
+  });
+}
+
 export async function findIncompleteImports() {
   return models.Import.findAll({
     attributes: ['id'],

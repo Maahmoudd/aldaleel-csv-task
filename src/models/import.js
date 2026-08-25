@@ -64,20 +64,32 @@ export function initializeImportModel(sequelize) {
         field: 'error_report',
       },
       uploadedAt: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATE(6),
         allowNull: false,
         defaultValue: DataTypes.NOW,
         field: 'uploaded_at',
       },
       startedAt: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATE(6),
         allowNull: true,
         field: 'started_at',
       },
       completedAt: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATE(6),
         allowNull: true,
         field: 'completed_at',
+      },
+      createdAt: {
+        type: DataTypes.DATE(6),
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+        field: 'created_at',
+      },
+      updatedAt: {
+        type: DataTypes.DATE(6),
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+        field: 'updated_at',
       },
     },
     {

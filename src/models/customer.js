@@ -33,6 +33,18 @@ export function initializeCustomerModel(sequelize) {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      createdAt: {
+        type: DataTypes.DATE(6),
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+        field: 'created_at',
+      },
+      updatedAt: {
+        type: DataTypes.DATE(6),
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+        field: 'updated_at',
+      },
     },
     {
       sequelize,

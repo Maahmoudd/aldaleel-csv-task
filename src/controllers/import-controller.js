@@ -1,3 +1,4 @@
+import { getImportResult, listImportResults } from '../services/import-query-service.js';
 import { createImportJob } from '../services/import-service.js';
 
 function serializeCreatedImport(importJob) {
@@ -24,4 +25,14 @@ export async function uploadImport(request, response) {
     .json({
       data: serializeCreatedImport(importJob),
     });
+}
+
+export async function getImport(request, response) {
+  const result = await getImportResult(request.validated.params.id);
+  response.set('Cache-Control', 'no-store').status(200).json({ data: result });
+}
+
+export async function listImports(request, response) {
+  const result = await listImportResults(request.validated.query);
+  response.set('Cache-Control', 'no-store').status(200).json(result);
 }
