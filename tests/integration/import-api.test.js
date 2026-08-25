@@ -277,7 +277,12 @@ describe('GET /api/imports', () => {
 });
 
 describe('service endpoints', () => {
-  it('returns health and structured unknown-route responses', async () => {
+  it('serves the admin console, health, and structured unknown-route responses', async () => {
+    const frontend = await api.get('/');
+    expect(frontend.status).toBe(200);
+    expect(frontend.headers['content-type']).toContain('text/html');
+    expect(frontend.text).toContain('CSV Import Console');
+
     const health = await api.get('/health');
     expect(health.status).toBe(200);
     expect(health.body).toEqual({ status: 'ok' });
