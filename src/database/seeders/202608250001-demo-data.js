@@ -8,6 +8,7 @@ export async function up({ context: queryInterface }) {
     {
       id: importId,
       filename: 'seed-customers.csv',
+      storage_key: 'seed-customers.csv',
       status: 'completed',
       total_records: 1,
       processed_records: 1,

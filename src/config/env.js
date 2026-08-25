@@ -6,6 +6,9 @@ const envSchema = z.object({
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
   MAX_FILE_SIZE_MB: z.coerce.number().positive().default(5),
+  UPLOAD_DIR: z.string().min(1).default('./uploads'),
+  UPLOAD_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(900000),
+  UPLOAD_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(20),
   DATABASE_URL: z
     .url()
     .refine((value) => ['mysql:', 'mysql2:'].includes(new URL(value).protocol), {

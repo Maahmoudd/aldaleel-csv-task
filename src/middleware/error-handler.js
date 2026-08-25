@@ -20,6 +20,9 @@ export function errorHandler(error, request, response, _next) {
   if (env.NODE_ENV !== 'production' && isServerError) {
     payload.error.stack = error.stack;
   }
+  if (error.details) {
+    payload.error.details = error.details;
+  }
 
   response.status(statusCode).json(payload);
 }

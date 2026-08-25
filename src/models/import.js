@@ -22,6 +22,12 @@ export function initializeImportModel(sequelize) {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      storageKey: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        field: 'storage_key',
+      },
       status: {
         type: DataTypes.ENUM(...IMPORT_STATUSES),
         allowNull: false,
