@@ -1,0 +1,68 @@
+services:
+  app:
+    build:
+      context: .
+      target: runtime
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      MAX_FILE_SIZE_MB: ${MAX_FILE_SIZE_MB:-5}
+      UPLOAD_DIR: /app/uploads
+      UPLOAD_RATE_LIMIT_WINDOW_MS: ${UPLOAD_RATE_LIMIT_WINDOW_MS:-900000}
+      UPLOAD_RATE_LIMIT_MAX: ${UPLOAD_RATE_LIMIT_MAX:-20}
+      IMPORT_BATCH_SIZE: ${IMPORT_BATCH_SIZE:-100}
+      DATABASE_URL: mysql://${MYSQL_USER:-epic_user}:${MYSQL_PASSWORD:-epic_password}@db:3306/${MYSQL_DATABASE:-epic_imports}
+      DB_MIGRATE_ON_START: 'true'
+      DB_SSL: 'false'
+      DB_POOL_MIN: ${DB_POOL_MIN:-0}
+      DB_POOL_MAX: ${DB_POOL_MAX:-10}
+      DB_POOL_ACQUIRE_MS: ${DB_POOL_ACQUIRE_MS:-30000}
+    depends_on:
+      db:
+        condition: service_healthy
+    init: true
+    ports:
+      - '${APP_PORT:-3000}:3000'
+    restart: unless-stopped
+    volumes:
+      - uploads_data:/app/uploads
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:3000/health').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-epic_imports}
+      MYSQL_USER: ${MYSQL_USER:-epic_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-epic_password}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-epic_root_password}
+    ports:
+      - '${MYSQL_PORT:-3306}:3306'
+    restart: unless-stopped
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'mysqladmin ping --host=127.0.0.1 --user=root --password=$$MYSQL_ROOT_PASSWORD --silent',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+volumes:
+  mysql_data:
+  uploads_data:

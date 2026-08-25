@@ -1,0 +1,13 @@
+.git
+.github
+.env
+.env.*
+!.env.example
+backup
+coverage
+node_modules
+tests
+tmp
+uploads
+*.log
+codex-prompt-csv-data-import.md
