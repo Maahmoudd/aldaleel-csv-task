@@ -22,7 +22,11 @@ function createUmzug({ sequelize, directory, tableName }) {
       }),
     },
     context: sequelize.getQueryInterface(),
-    storage: new SequelizeStorage({ sequelize, tableName }),
+    storage: new SequelizeStorage({
+      sequelize,
+      modelName: tableName,
+      tableName,
+    }),
     logger: undefined,
   });
 }
