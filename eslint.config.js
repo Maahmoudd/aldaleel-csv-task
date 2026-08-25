@@ -24,4 +24,10 @@ export default [
       globals: globals.jest,
     },
   },
+  {
+    files: ['client/**/*.js'],
+    languageOptions: {
+      globals: globals.browser,
+    },
+  },
 ];

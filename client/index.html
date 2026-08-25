@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Upload customer CSV files and monitor validation and import results."
+    />
+    <title>CSV Import Console</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" type="module"></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Import Console home">
+          <span class="brand-mark" aria-hidden="true">IC</span>
+          <span>
+            <strong>Import Console</strong>
+            <small>Customer operations</small>
+          </span>
+        </a>
+        <div class="service-state">
+          <span class="state-dot" aria-hidden="true"></span>
+          Import service
+        </div>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="page-title">
+          <div>
+            <p class="eyebrow">Customer data / CSV</p>
+            <h1 id="page-title">Turn a customer file into clean records.</h1>
+            <p class="hero-copy">
+              Upload once, watch every row process, and review validation issues without leaving
+              this page.
+            </p>
+          </div>
+          <div class="schema-card" aria-label="Required CSV columns">
+            <span>Required header</span>
+            <code>name,email,phone</code>
+          </div>
+        </section>
+
+        <div class="workspace-grid">
+          <div class="primary-column">
+            <section class="panel upload-panel" aria-labelledby="upload-title">
+              <div class="panel-heading">
+                <div>
+                  <p class="step-label">01 / Upload</p>
+                  <h2 id="upload-title">Choose your customer file</h2>
+                </div>
+                <span class="file-limit">CSV · max 5 MB</span>
+              </div>
+
+              <form id="upload-form">
+                <label class="drop-zone" id="drop-zone" for="file-input">
+                  <input id="file-input" name="file" type="file" accept=".csv,text/csv" />
+                  <span class="upload-icon" aria-hidden="true">↑</span>
+                  <strong id="drop-title">Drop a CSV here</strong>
+                  <span id="drop-copy">or select a file from your computer</span>
+                  <span class="selected-file" id="selected-file" hidden></span>
+                </label>
+                <div class="upload-actions">
+                  <p><strong>Before you upload:</strong> include one header row and UTF-8 text.</p>
+                  <button class="primary-button" id="upload-button" type="submit" disabled>
+                    Start import
+                  </button>
+                </div>
+                <div class="upload-progress" id="upload-progress" hidden>
+                  <div>
+                    <span id="upload-progress-label">Uploading</span
+                    ><span id="upload-percent">0%</span>
+                  </div>
+                  <progress id="upload-progress-bar" max="100" value="0">0%</progress>
+                </div>
+              </form>
+              <div class="notice" id="form-notice" role="alert" hidden></div>
+            </section>
+
+            <section
+              class="panel result-panel"
+              id="result-panel"
+              aria-labelledby="result-title"
+              hidden
+            >
+              <div class="panel-heading status-heading">
+                <div>
+                  <p class="step-label">02 / Process</p>
+                  <h2 id="result-title">Import status</h2>
+                </div>
+                <span class="status-pill" id="status-pill">Pending</span>
+              </div>
+
+              <div class="job-summary">
+                <div>
+                  <span>File</span>
+                  <strong id="job-filename">—</strong>
+                </div>
+                <div>
+                  <span>Import ID</span>
+                  <button class="copy-id" id="copy-id" type="button">—</button>
+                </div>
+              </div>
+
+              <div class="processing-progress">
+                <div><span>Rows processed</span><strong id="process-percent">0%</strong></div>
+                <progress id="process-progress-bar" max="100" value="0">0%</progress>
+                <p id="process-caption" aria-live="polite">Waiting for processing to start…</p>
+              </div>
+
+              <div class="metric-grid" aria-label="Import metrics">
+                <article><span>Total rows</span><strong id="metric-total">0</strong></article>
+                <article><span>Imported</span><strong id="metric-success">0</strong></article>
+                <article><span>Failed</span><strong id="metric-failed">0</strong></article>
+              </div>
+
+              <div class="errors-section" id="errors-section" hidden>
+                <div class="section-title">
+                  <div>
+                    <p class="step-label">03 / Review</p>
+                    <h3>Rows requiring attention</h3>
+                  </div>
+                  <span id="error-count">0 issues</span>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Row</th>
+                        <th>Field</th>
+                        <th>Reason</th>
+                      </tr>
+                    </thead>
+                    <tbody id="error-rows"></tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <aside class="panel history-panel" aria-labelledby="history-title">
+            <div class="panel-heading compact">
+              <div>
+                <p class="step-label">Recent activity</p>
+                <h2 id="history-title">Latest imports</h2>
+              </div>
+              <button
+                class="icon-button"
+                id="refresh-history"
+                type="button"
+                aria-label="Refresh imports"
+              >
+                ↻
+              </button>
+            </div>
+            <div class="history-list" id="history-list" aria-live="polite">
+              <p class="empty-state">Loading recent imports…</p>
+            </div>
+          </aside>
+        </div>
+      </main>
+
+      <footer>
+        <span>EPIC CSV Data Import</span>
+        <a href="/health">Service health</a>
+      </footer>
+    </div>
+  </body>
+</html>

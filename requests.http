@@ -1,0 +1,28 @@
+@baseUrl = http://localhost:3000
+@importId = 00000000-0000-4000-8000-000000000099
+
+### Health check
+GET {{baseUrl}}/health
+Accept: application/json
+
+### Upload a CSV
+POST {{baseUrl}}/api/imports
+Accept: application/json
+Content-Type: multipart/form-data; boundary=CsvBoundary
+
+--CsvBoundary
+Content-Disposition: form-data; name="file"; filename="customers.csv"
+Content-Type: text/csv
+
+name,email,phone
+Ada Lovelace,ada@example.com,+442079460123
+Grace Hopper,grace@example.com,+12025550184
+--CsvBoundary--
+
+### Get one import (replace importId after uploading)
+GET {{baseUrl}}/api/imports/{{importId}}
+Accept: application/json
+
+### List recent imports
+GET {{baseUrl}}/api/imports?page=1&limit=10
+Accept: application/json
