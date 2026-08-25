@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { SequelizeStorage, Umzug } from 'umzug';
 
@@ -9,6 +9,17 @@ function createUmzug({ sequelize, directory, tableName }) {
   return new Umzug({
     migrations: {
       glob: path.join(databaseDirectory, directory, '*.js'),
+      resolve: ({ name, path: migrationPath, context }) => ({
+        name,
+        up: async () => {
+          const migration = await import(pathToFileURL(migrationPath).href);
+          return migration.up({ context });
+        },
+        down: async () => {
+          const migration = await import(pathToFileURL(migrationPath).href);
+          return migration.down({ context });
+        },
+      }),
     },
     context: sequelize.getQueryInterface(),
     storage: new SequelizeStorage({ sequelize, tableName }),

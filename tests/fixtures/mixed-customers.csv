@@ -1,0 +1,5 @@
+name,email,phone
+Valid Customer,valid@example.com,+1 (202) 555-0123
+Bad Email,not-an-email,+12025550124
+Missing Phone,no-phone@example.com,
+Duplicate Customer,valid@example.com,+12025550125
