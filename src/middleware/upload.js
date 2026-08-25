@@ -5,10 +5,10 @@ import { randomUUID } from 'node:crypto';
 import multer from 'multer';
 
 import { env } from '../config/env.js';
+import { uploadDirectory } from '../config/paths.js';
 import { AppError } from '../utils/app-error.js';
 
 const allowedMimeTypes = new Set(['text/csv', 'application/csv', 'application/vnd.ms-excel']);
-const uploadDirectory = path.resolve(env.UPLOAD_DIR);
 
 mkdirSync(uploadDirectory, { recursive: true });
 

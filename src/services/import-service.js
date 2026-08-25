@@ -3,6 +3,7 @@ import path from 'node:path';
 import { createImport } from '../repositories/import-repository.js';
 import { AppError } from '../utils/app-error.js';
 import { removeUploadedFile } from '../utils/upload-file.js';
+import { enqueueImport } from './import-queue.js';
 
 export async function createImportJob(file) {
   if (!file) {
@@ -25,10 +26,12 @@ export async function createImportJob(file) {
   }
 
   try {
-    return await createImport({
+    const importJob = await createImport({
       filename,
       storageKey: file.filename,
     });
+    enqueueImport(importJob.id);
+    return importJob;
   } catch (error) {
     await removeUploadedFile(file.path);
     throw error;

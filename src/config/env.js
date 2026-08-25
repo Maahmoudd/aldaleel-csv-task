@@ -9,9 +9,10 @@ const envSchema = z.object({
   UPLOAD_DIR: z.string().min(1).default('./uploads'),
   UPLOAD_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(900000),
   UPLOAD_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(20),
+  IMPORT_BATCH_SIZE: z.coerce.number().int().min(1).max(1000).default(100),
   DATABASE_URL: z
     .url()
-    .refine((value) => ['mysql:', 'mysql2:'].includes(new URL(value).protocol), {
+    .refine((value) => new URL(value).protocol === 'mysql:', {
       message: 'DATABASE_URL must use the mysql:// protocol',
     })
     .default('mysql://epic_user:epic_password@127.0.0.1:3306/epic_imports'),

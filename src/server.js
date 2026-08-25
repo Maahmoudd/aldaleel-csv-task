@@ -2,6 +2,7 @@ import { createApp } from './app.js';
 import { env } from './config/env.js';
 import { closeDatabase, migrateDatabase, sequelize } from './database/index.js';
 import { logger } from './config/logger.js';
+import { resumeIncompleteImports, waitForImportQueue } from './services/import-queue.js';
 
 const app = createApp();
 let server;
@@ -12,6 +13,7 @@ async function start() {
     await migrateDatabase();
   }
   await sequelize.authenticate();
+  await resumeIncompleteImports();
 
   server = app.listen(env.PORT, () => {
     logger.info({ port: env.PORT, environment: env.NODE_ENV }, 'HTTP server started');
@@ -29,6 +31,7 @@ async function shutdown(signal, exitCode = 0) {
         server.close((error) => (error ? reject(error) : resolve()));
       });
     }
+    await waitForImportQueue();
     await closeDatabase();
   } catch (error) {
     logger.error({ err: error }, 'Graceful shutdown failed');
